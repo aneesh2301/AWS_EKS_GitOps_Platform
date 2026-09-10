@@ -6,7 +6,7 @@ locals {
 }
 
 module "vpc" {
-  source = "../../modules/vpc"
+  source = "../modules/vpc"
 
   name                = var.vpc_name
   cidr                = var.vpc_cidr
@@ -19,7 +19,7 @@ module "vpc" {
 }
 
 module "eks" {
-  source = "../../modules/eks"
+  source = "../modules/eks"
 
   cluster_name    = var.cluster_name
   cluster_version = var.cluster_version
@@ -33,7 +33,7 @@ module "eks" {
 
   enable_irsa               = var.enable_irsa
   cluster_enabled_log_types = var.cluster_enabled_log_types
-  cluster_addons            = local.cluster_addons
+  cluster_addons            = var.cluster_addons
   node_group                = var.node_group
 
   tags = local.common_tags

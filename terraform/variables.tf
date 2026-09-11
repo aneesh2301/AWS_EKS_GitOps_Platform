@@ -91,7 +91,10 @@ variable "cluster_addons" {
   default = {
     coredns    = { most_recent = true }
     kube-proxy = { most_recent = true }
-    vpc-cni    = { most_recent = true }
+    vpc-cni    = {
+      most_recent   = true
+      before_compute = true
+    }
   }
 }
 

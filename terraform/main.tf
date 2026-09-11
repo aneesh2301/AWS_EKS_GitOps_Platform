@@ -43,6 +43,7 @@ module "eks" {
   cluster_enabled_log_types = var.cluster_enabled_log_types
   cluster_addons            = var.cluster_addons
   node_group                = var.node_group
+  admin_principal_arn       = var.admin_principal_arn
 
   tags = local.common_tags
 }

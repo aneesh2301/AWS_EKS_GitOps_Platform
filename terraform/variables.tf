@@ -109,3 +109,8 @@ variable "node_group" {
     capacity_type  = string
   })
 }
+
+variable "admin_principal_arn" {
+  description = "IAM principal ARN to grant cluster admin access"
+  type        = string
+}

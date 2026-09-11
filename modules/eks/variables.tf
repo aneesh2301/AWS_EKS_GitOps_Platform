@@ -64,6 +64,12 @@ variable "node_group" {
   })
 }
 
+variable "admin_principal_arn" {
+  description = "IAM principal ARN to grant cluster admin access"
+  type        = string
+}
+
+
 
 variable "tags" {
   description = "Tags to apply to all resources"

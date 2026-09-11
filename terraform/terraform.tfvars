@@ -25,6 +25,6 @@ node_group = {
   max_size       = 3
   desired_size   = 3
   capacity_type  = "ON_DEMAND"
-
-  admin_principal_arn = "arn:aws:iam::339712970776:user/aneesh"
 }
+
+admin_principal_arn = "arn:aws:iam::339712970776:user/aneesh"

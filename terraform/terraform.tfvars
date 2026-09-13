@@ -1,5 +1,6 @@
 aws_region  = "us-east-1"
-project     = "AWS_EKS_GitOps_Platform"
+environment = "dev"
+account_id  = "339712970776"
 
 
 # ── VPC ───────────────────────────────────────────────────────────────────────
@@ -14,7 +15,7 @@ single_nat_gateway = true
 # ── EKS ───────────────────────────────────────────────────────────────────────
 cluster_name                    = "eks-dev-cluster"
 cluster_version                 = "1.33"
-cluster_endpoint_public_access  = true
+cluster_endpoint_public_access  = false
 cluster_endpoint_private_access = false
 enable_irsa                     = true
 

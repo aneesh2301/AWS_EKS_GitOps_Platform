@@ -4,10 +4,14 @@ variable "aws_region" {
   default     = "us-east-1"
 }
 
-variable "project" {
-  description = "Project name used in naming and tagging"
+variable "environment" {
+  description = "Environment name (dev, stage, prod)"
   type        = string
-  default     = "eks-production-project"
+}
+
+variable "account_id" {
+  description = "AWS account ID"
+  type        = string
 }
 
 # ── VPC ───────────────────────────────────────────────────────────────────────
@@ -64,7 +68,6 @@ variable "cluster_version" {
 variable "cluster_endpoint_public_access" {
   description = "Enable public access to the cluster API endpoint"
   type        = bool
-  default     = true
 }
 
 variable "cluster_endpoint_private_access" {

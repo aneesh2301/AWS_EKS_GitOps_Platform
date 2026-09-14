@@ -28,4 +28,4 @@ node_group = {
   capacity_type  = "ON_DEMAND"
 }
 
-admin_principal_arn = "arn:aws:iam::339712970776:user/aneesh"
+admin_principal_arn = "arn:aws:iam::339712970776:role/cluster_role"

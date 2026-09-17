@@ -14,7 +14,7 @@ single_nat_gateway = true
 
 # ── EKS ───────────────────────────────────────────────────────────────────────
 cluster_name                    = "eks-dev-cluster"
-cluster_version                 = "1.36"
+cluster_version                 = "1.34"
 cluster_endpoint_public_access  = false
 cluster_endpoint_private_access = true
 enable_irsa                     = true

@@ -13,3 +13,4 @@ resources:
   - shippingservice.yaml
   - frontend.yaml
   - currencyservice.yaml
+  - namespace.yaml

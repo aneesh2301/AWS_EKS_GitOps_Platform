@@ -117,3 +117,10 @@ variable "admin_principal_arn" {
   description = "IAM principal ARN to grant cluster admin access"
   type        = string
 }
+
+# ── FLUX ───────────────────────────────────────────────────────────────────────
+
+variable "git_token" {
+  description = "Git token for Flux to access the Git repository"
+  type        = string
+}

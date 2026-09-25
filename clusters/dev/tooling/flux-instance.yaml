@@ -1,0 +1,30 @@
+apiVersion: fluxcd.controlplane.io/v1
+kind: FluxInstance
+metadata:
+  name: flux
+  namespace: tooling
+
+spec:
+  distribution:
+    version: "2.x"
+    registry: "ghcr.io/fluxcd"
+
+  components:
+    - source-controller
+    - kustomize-controller
+    - helm-controller
+    - notification-controller
+
+  cluster:
+    type: kubernetes
+    multitenant: false
+    networkPolicy: true
+    domain: cluster.local
+
+  sync:
+    kind: GitRepository
+    provider: github
+    url: https://github.com/aneesh2301/AWS_EKS_GitOps_Platform
+    ref: refs/heads/main
+    path: ./clusters/dev/tooling
+    pullSecret: git-credentials

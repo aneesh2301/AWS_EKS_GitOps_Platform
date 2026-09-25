@@ -23,7 +23,6 @@ spec:
 
   sync:
     kind: GitRepository
-    provider: github
     url: https://github.com/aneesh2301/AWS_EKS_GitOps_Platform
     ref: refs/heads/main
     path: ./clusters/dev/tooling

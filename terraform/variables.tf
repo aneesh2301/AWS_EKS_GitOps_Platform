@@ -118,9 +118,3 @@ variable "admin_principal_arn" {
   type        = string
 }
 
-# ── FLUX ───────────────────────────────────────────────────────────────────────
-
-variable "git_token" {
-  description = "Git token for Flux to access the Git repository"
-  type        = string
-}

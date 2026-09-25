@@ -12,3 +12,8 @@ output "cluster_endpoint" {
   description = "The API server endpoint of the EKS cluster"
   value       = module.eks.cluster_endpoint
 }
+
+output "cluster_certificate_authority_data" {
+  description = "Base64-encoded certificate data required to connect to the EKS API server"
+  value       = module.eks.cluster_certificate_authority_data
+}

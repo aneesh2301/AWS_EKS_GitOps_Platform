@@ -1,0 +1,17 @@
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: monitoring
+  namespace: tooling
+spec:
+  interval: 1m
+  path: ./infrastructure/monitoring/
+  targetNamespace: monitoring
+  prune: false
+  sourceRef:
+    kind: GitRepository
+    name: tooling
+  wait: true
+  timeout: 5m
+  dependsOn:
+    - name: monitoring-crds

@@ -4,3 +4,5 @@ resources:
   - app.yaml
   - flux-instance.yaml
   - sealed-secrets
+  - monitoring-crds.yaml
+  - monitoring.yaml

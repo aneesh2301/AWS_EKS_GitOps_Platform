@@ -13,9 +13,9 @@ spec:
         kind: HelmRepository
         name: prometheus-community
   install:
-    crds: skip
+    crds: Skip
   upgrade:
-    crds: skip
+    crds: Skip
   values:
     crds:
       enabled: false

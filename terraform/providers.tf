@@ -42,6 +42,8 @@ provider "kubernetes" {
       module.eks.cluster_name,
       "--region",
       var.aws_region,
+      "--role-arn",
+      var.admin_principal_arn
     ]
   }
 }
@@ -60,6 +62,8 @@ provider "helm" {
         module.eks.cluster_name,
         "--region",
         var.aws_region,
+        "--role-arn",
+        var.admin_principal_arn
       ]
     }
   }

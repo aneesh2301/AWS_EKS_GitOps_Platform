@@ -6,6 +6,5 @@ resources:
   - sealed-secrets
   - monitoring-crds.yaml
   - monitoring.yaml
-  - kyverno-crds.yaml
   - kyverno.yaml
   

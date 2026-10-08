@@ -13,5 +13,3 @@ spec:
     name: tooling
   wait: true
   timeout: 5m
-  dependsOn:
-    - name: kyverno-crds

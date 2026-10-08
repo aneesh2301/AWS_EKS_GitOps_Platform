@@ -118,3 +118,17 @@ variable "admin_principal_arn" {
   type        = string
 }
 
+variable "eks_oidc_provider_arn" {
+  description = "ARN of the EKS OIDC provider"
+  type        = string
+}
+
+variable "eks_oidc_provider" {
+  description = "OIDC issuer host/path without https://"
+  type        = string
+}
+
+variable "observability_namespace" {
+  type    = string
+  default = "monitoring"
+}

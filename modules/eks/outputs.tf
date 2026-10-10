@@ -23,6 +23,11 @@ output "oidc_provider_arn" {
   value       = module.eks.oidc_provider_arn
 }
 
+output "oidc_provider" {
+  description = "EKS OIDC issuer host/path without https://"
+  value       = module.eks.oidc_provider
+}
+
 output "cluster_oidc_issuer_url" {
   description = "HTTPS issuer URL of the EKS OIDC provider"
   value       = module.eks.cluster_oidc_issuer_url

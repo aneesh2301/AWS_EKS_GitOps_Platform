@@ -1,0 +1,49 @@
+minio:
+  enabled: false
+
+kafka:
+  enabled: false
+
+nginx:
+  enabled: true
+
+# Use classic architecture rather than ingest storage.
+mimir:
+  structuredConfig:
+    ingest_storage:
+      enabled: false
+      kafka:
+        address: null
+        topic: null
+        auto_create_topic_default_partitions: null
+    distributor:
+      remote_timeout: null
+    ingester:
+      push_grpc_method_enabled: null
+
+    common:
+      storage:
+        backend: s3
+        s3:
+          region: us-east-1
+
+    blocks_storage:
+      backend: s3
+      s3:
+        bucket_name: eks-dev-cluster-dev-observability
+
+    alertmanager_storage:
+      backend: s3
+      s3:
+        bucket_name: eks-dev-cluster-dev-observability
+
+    ruler_storage:
+      backend: s3
+      s3:
+        bucket_name: eks-dev-cluster-dev-observability
+
+serviceAccount:
+  create: true
+  name: mimir
+  annotations:
+    eks.amazonaws.com/role-arn: "arn:aws:iam::339712970776:role/eks-dev-cluster-dev-mimir-s3"

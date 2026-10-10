@@ -1,91 +1,10 @@
-locals {
-  observability_backends = {
-    mimir = {
-      prefix          = "metrics"
-      service_account = "mimir"
-    }
-    loki = {
-      prefix          = "logs"
-      service_account = "loki"
-    }
-    tempo = {
-      prefix          = "traces"
-      service_account = "tempo"
-    }
-  }
-}
+module "irsa" {
+  source = "../modules/irsa"
 
-resource "aws_iam_role" "observability" {
-  for_each = local.observability_backends
-
-  name = "${var.cluster_name}-${var.environment}-${each.key}-s3"
-
-  assume_role_policy = jsonencode({
-    Version = "2012-10-17"
-    Statement = [{
-      Effect = "Allow"
-      Principal = {
-        Federated = var.eks_oidc_provider_arn
-      }
-      Action = "sts:AssumeRoleWithWebIdentity"
-      Condition = {
-        StringEquals = {
-          "${var.eks_oidc_provider}:aud" = "sts.amazonaws.com"
-          "${var.eks_oidc_provider}:sub" = "system:serviceaccount:${var.observability_namespace}:${each.value.service_account}"
-        }
-      }
-    }]
-  })
-
-  tags = {
-    ManagedBy = "terraform"
-    Purpose   = "observability"
-  }
-}
-
-resource "aws_iam_policy" "observability_s3" {
-  for_each = local.observability_backends
-
-  name = "${var.cluster_name}-${var.environment}-${each.key}-s3"
-
-  policy = jsonencode({
-    Version = "2012-10-17"
-    Statement = [
-      {
-        Sid    = "ListOwnPrefix"
-        Effect = "Allow"
-        Action = [
-          "s3:ListBucket"
-        ]
-        Resource = aws_s3_bucket.observability.arn
-        Condition = {
-          StringLike = {
-            "s3:prefix" = [
-              each.value.prefix,
-              "${each.value.prefix}/*"
-            ]
-          }
-        }
-      },
-      {
-        Sid    = "ManageOwnObjects"
-        Effect = "Allow"
-        Action = [
-          "s3:GetObject",
-          "s3:PutObject",
-          "s3:DeleteObject",
-          "s3:AbortMultipartUpload",
-          "s3:ListMultipartUploadParts"
-        ]
-        Resource = "${aws_s3_bucket.observability.arn}/${each.value.prefix}/*"
-      }
-    ]
-  })
-}
-
-resource "aws_iam_role_policy_attachment" "observability_s3" {
-  for_each = local.observability_backends
-
-  role       = aws_iam_role.observability[each.key].name
-  policy_arn = aws_iam_policy.observability_s3[each.key].arn
+  cluster_name             = var.cluster_name
+  environment              = var.environment
+  oidc_provider_arn        = module.eks.oidc_provider_arn
+  oidc_provider            = module.eks.oidc_provider
+  observability_bucket_arn = aws_s3_bucket.observability.arn
+  observability_namespace  = var.observability_namespace
 }

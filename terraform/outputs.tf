@@ -18,21 +18,15 @@ output "eks_oidc_issuer_url" {
 
 output "observability_irsa_role_arns" {
   description = "IAM role ARNs for the Mimir, Loki, and Tempo service accounts"
-  value = {
-    for backend, role in aws_iam_role.observability : backend => role.arn
-  }
+  value       = module.irsa.observability_role_arns
 }
 
 output "observability_irsa_role_names" {
   description = "IAM role names for the Mimir, Loki, and Tempo service accounts"
-  value = {
-    for backend, role in aws_iam_role.observability : backend => role.name
-  }
+  value       = module.irsa.observability_role_names
 }
 
 output "observability_s3_policy_arns" {
   description = "S3 policy ARNs attached to the observability IRSA roles"
-  value = {
-    for backend, policy in aws_iam_policy.observability_s3 : backend => policy.arn
-  }
+  value       = module.irsa.observability_s3_policy_arns
 }

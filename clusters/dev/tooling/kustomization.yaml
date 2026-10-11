@@ -7,4 +7,5 @@ resources:
   - monitoring-crds.yaml
   - monitoring.yaml
   - kyverno.yaml
+  - mimir.yaml
   

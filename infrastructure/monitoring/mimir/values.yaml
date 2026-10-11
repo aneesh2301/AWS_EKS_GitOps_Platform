@@ -47,3 +47,19 @@ serviceAccount:
   name: mimir
   annotations:
     eks.amazonaws.com/role-arn: "arn:aws:iam::339712970776:role/eks-dev-cluster-dev-mimir-s3"
+
+alertmanager:
+  persistentVolume:
+    storageClass: gp2
+
+compactor:
+  persistentVolume:
+    storageClass: gp2
+
+ingester:
+  persistentVolume:
+    storageClass: gp2
+
+store_gateway:
+  persistentVolume:
+    storageClass: gp2

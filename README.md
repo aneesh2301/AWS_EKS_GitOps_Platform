@@ -1,83 +1,57 @@
 # AWS EKS GitOps Platform
 
-This repository contains the current foundation of an AWS-based Kubernetes platform built with Terraform, Amazon EKS, and FluxCD.
+An AWS Kubernetes platform built with Terraform, Amazon EKS, Flux Operator, and Flux CD. Terraform owns cloud infrastructure and bootstrap resources; Flux reconciles platform services and applications from this repository.
 
-At this stage, the repository provisions the core infrastructure, bootstraps GitOps, and deploys a sample microservices application into the cluster.
+## Current Status
 
-## What Is Built So Far
+### Configured
 
-- Terraform-based infrastructure provisioning for VPC and EKS
-- Reusable Terraform modules for VPC and EKS under [modules/vpc](modules/vpc) and [modules/eks](modules/eks)
-- Amazon EKS cluster with managed node groups
-- Core EKS addons configured through Terraform
-- FluxCD bootstrap for GitOps reconciliation from this repository
-- Application deployment manifests under [app/kubernetes](app/kubernetes)
-- Flux Kustomization for the dev cluster under [clusters/dev/flux-system](clusters/dev/flux-system)
+- VPC with public and private subnets, NAT gateway options, and EKS subnet tags.
+- EKS cluster with managed node groups, core addons, IRSA, control-plane logs, and an EKS access entry for the configured administrator.
+- Terraform remote-state backend configuration under [terraform](terraform) and bootstrap configuration under [remote_backend](remote_backend).
+- Flux Operator bootstrap in the `tooling` namespace, synchronized from `main` at [clusters/dev/tooling](clusters/dev/tooling).
+- Git credentials read from AWS Secrets Manager at `secret/flux/dev/git-credentials`.
+- Observability S3 bucket plus IRSA roles for Mimir, Loki, and Tempo.
+- EBS CSI controller IRSA role. Terraform publishes its ARN to the `tooling/cluster-runtime-values` ConfigMap; Flux substitutes it into the EBS CSI HelmRelease.
+- GitOps definitions for the microservices app, Sealed Secrets, Prometheus Operator CRDs, kube-prometheus-stack, Kyverno, Mimir, and the AWS EBS CSI driver.
 
-## Current Architecture
+### Needs Cluster Reconciliation
 
-The current flow is:
+The repository has been locally validated, but runtime health must be checked after applying Terraform and allowing Flux to reconcile. In particular:
 
-1. Terraform provisions the VPC and EKS cluster from [terraform](terraform).
-2. The EKS module grants cluster admin access to the configured IAM principal.
-3. FluxCD watches this Git repository and reconciles the cluster state from [clusters/dev](clusters/dev).
-4. Flux deploys the application manifests from [app/kubernetes](app/kubernetes) into the `microservices` namespace.
+- Mimir has a Flux Kustomization but [infrastructure/monitoring/mimir](infrastructure/monitoring/mimir) still needs a `kustomization.yaml` that includes its HelmRepository and HelmRelease, and its `values.yaml` must be connected to the HelmRelease.
+- Confirm Flux source authentication, HelmRepository readiness, HelmRelease readiness, and workload health on the cluster.
+- Confirm the desired Kyverno CRD ownership approach before relying on Kyverno policies in production.
 
-## Repository Structure
+## Architecture
 
-- [terraform](terraform): root Terraform configuration for the environment
-- [modules/vpc](modules/vpc): reusable VPC module
-- [modules/eks](modules/eks): reusable EKS module
-- [remote_backend](remote_backend): backend bootstrap configuration for remote Terraform state
-- [clusters/dev/flux-system](clusters/dev/flux-system): Flux bootstrap and app Kustomization for the dev cluster
-- [app/kubernetes](app/kubernetes): Kubernetes manifests for the microservices application
+```text
+Terraform
+	-> VPC, EKS, OIDC provider, S3, IAM/IRSA, Flux bootstrap
+	-> FluxInstance in tooling
+	-> GitRepository: clusters/dev/tooling
+	-> Flux Kustomizations
+			 -> monitoring-crds -> mimir -> monitoring
+			 -> ebs-csi-driver (IRSA ARN injected from ConfigMap)
+			 -> kyverno
+			 -> sealed-secrets
+			 -> apps -> app/kubernetes
+```
 
-## Infrastructure Details
+## Repository Layout
 
-The Terraform configuration currently covers:
+- [terraform](terraform): environment Terraform root, including Flux bootstrap, S3, IRSA, and EBS CSI IAM integration.
+- [modules/vpc](modules/vpc): reusable VPC module.
+- [modules/eks](modules/eks): reusable EKS module.
+- [modules/irsa](modules/irsa): observability IRSA roles and scoped S3 policies.
+- [modules/addons](modules/addons): EBS CSI controller IRSA role.
+- [clusters/dev/tooling](clusters/dev/tooling): Flux root and cluster-level reconciliation order.
+- [infrastructure/monitoring](infrastructure/monitoring): Prometheus stack, CRDs, and Mimir configuration.
+- [infrastructure/networking/ebs-csi-driver](infrastructure/networking/ebs-csi-driver): AWS EBS CSI Helm release.
+- [infrastructure/kyverno](infrastructure/kyverno): Kyverno manifests.
+- [app/kubernetes](app/kubernetes): microservices application manifests.
 
-- Custom VPC with public and private subnets
-- NAT gateway for private subnet egress
-- EKS cluster with managed node groups
-- Public cluster endpoint access and optional private endpoint support
-- IAM access entry for a configured admin principal
-- EKS addons:
-	- `coredns`
-	- `kube-proxy`
-	- `vpc-cni`
-
-The VPC subnets are tagged for EKS load balancer and cluster discovery use.
-
-## GitOps Setup
-
-Flux is configured to:
-
-- sync from the `main` branch of this repository
-- reconcile the cluster configuration from [clusters/dev](clusters/dev)
-- reconcile the application manifests from [app/kubernetes](app/kubernetes)
-- deploy the app into the `microservices` namespace
-
-The application Kustomization is defined in [clusters/dev/flux-system/apps.yaml](clusters/dev/flux-system/apps.yaml).
-
-## Sample Application
-
-The repository currently deploys a microservices demo application made up of multiple services, including:
-
-- frontend
-- checkoutservice
-- cartservice
-- productcatalogservice
-- paymentservice
-- shippingservice
-- recommendationservice
-- emailservice
-- currencyservice
-- adservice
-- loadgenerator
-
-## How To Use
-
-### 1. Provision infrastructure
+## Provisioning
 
 From [terraform](terraform):
 
@@ -87,48 +61,46 @@ terraform plan
 terraform apply
 ```
 
-### 2. Configure cluster access
+Terraform requires an AWS Secrets Manager secret named `secret/flux/dev/git-credentials`. It may contain either a JSON value with `username` and `password` fields or a token string; the credential must be authorized to read this repository.
 
-After the cluster is created:
+After the cluster is available:
 
 ```zsh
-aws eks update-kubeconfig --name <cluster-name> --region <aws-region>
+aws eks update-kubeconfig --name eks-dev-cluster --region us-east-1
 ```
 
-### 3. Verify Flux
+## Verification
 
 ```zsh
-flux get kustomizations -A
-kubectl get pods -n flux-system
-```
-
-### 4. Verify the application
-
-```zsh
+kubectl get fluxinstances -n tooling
+kubectl get gitrepositories,kustomizations,helmreleases -A
+kubectl get pods -n tooling
+kubectl get pods -n monitoring
+kubectl get pods -n kube-system -l app.kubernetes.io/name=aws-ebs-csi-driver
 kubectl get pods -n microservices
-kubectl get svc -n microservices
 ```
 
-## Inputs You Configure
+Inspect a failed reconciliation with:
 
-The main environment-specific inputs live in [terraform/terraform.tfvars](terraform/terraform.tfvars), including:
+```zsh
+kubectl describe kustomization <name> -n tooling
+kubectl describe helmrelease <name> -n <namespace>
+```
 
-- AWS region
-- environment name
-- AWS account ID
-- VPC CIDR and subnet CIDRs
-- cluster name and Kubernetes version
-- managed node group sizing
-- admin IAM principal ARN for EKS access
+## Terraform Outputs
 
-## In Progress
+Terraform exports cluster access and integration values, including:
 
-The networking layer and platform addons are still in active development.
+- `eks_oidc_provider_arn`
+- `eks_oidc_issuer_url`
+- `ebs_csi_irsa_role_arn`
+- `observability_irsa_role_arns`
+- `observability_s3_policy_arns`
 
-That work is expected to include broader platform capabilities on top of the current EKS foundation, such as environment hardening, networking extensions, and additional cluster services. The current repository should be treated as the working baseline, not the final platform state.
+## Local Validation
 
-## Notes
-
-- Terraform state is configured to use an S3 backend.
-- Flux is the source of truth for application deployment after cluster bootstrap.
-- The current dev environment is the active target under [clusters/dev](clusters/dev).
+```zsh
+terraform -chdir=terraform validate
+kubectl kustomize clusters/dev/tooling
+kubectl kustomize infrastructure/networking/ebs-csi-driver
+```

@@ -8,4 +8,5 @@ resources:
   - monitoring.yaml
   - kyverno.yaml
   - mimir.yaml
+  - ebs-csi-driver.yaml
   

@@ -12,8 +12,8 @@ An AWS Kubernetes platform built with Terraform, Amazon EKS, Flux Operator, and 
 - Flux Operator bootstrap in the `tooling` namespace, synchronized from `main` at [clusters/dev/tooling](clusters/dev/tooling).
 - Git credentials read from AWS Secrets Manager at `secret/flux/dev/git-credentials`.
 - Observability S3 bucket plus IRSA roles for Mimir, Loki, and Tempo.
-- EBS CSI controller IRSA role. Terraform publishes its ARN to the `tooling/cluster-runtime-values` ConfigMap; Flux substitutes it into the EBS CSI HelmRelease.
-- GitOps definitions for the microservices app, Sealed Secrets, Prometheus Operator CRDs, kube-prometheus-stack, Kyverno, Mimir, and the AWS EBS CSI driver.
+- AWS-managed EBS CSI add-on with an IRSA role assigned through `service_account_role_arn`.
+- GitOps definitions for the microservices app, Sealed Secrets, Prometheus Operator CRDs, kube-prometheus-stack, Kyverno, and Mimir.
 
 ### Needs Cluster Reconciliation
 
@@ -32,7 +32,7 @@ Terraform
 	-> GitRepository: clusters/dev/tooling
 	-> Flux Kustomizations
 			 -> monitoring-crds -> mimir -> monitoring
-			 -> ebs-csi-driver (IRSA ARN injected from ConfigMap)
+			-> AWS-managed EBS CSI add-on (IRSA role assigned by Terraform)
 			 -> kyverno
 			 -> sealed-secrets
 			 -> apps -> app/kubernetes
@@ -44,10 +44,9 @@ Terraform
 - [modules/vpc](modules/vpc): reusable VPC module.
 - [modules/eks](modules/eks): reusable EKS module.
 - [modules/irsa](modules/irsa): observability IRSA roles and scoped S3 policies.
-- [modules/addons](modules/addons): EBS CSI controller IRSA role.
+- [modules/addons](modules/addons): EBS CSI controller IRSA role for the AWS-managed add-on.
 - [clusters/dev/tooling](clusters/dev/tooling): Flux root and cluster-level reconciliation order.
 - [infrastructure/monitoring](infrastructure/monitoring): Prometheus stack, CRDs, and Mimir configuration.
-- [infrastructure/networking/ebs-csi-driver](infrastructure/networking/ebs-csi-driver): AWS EBS CSI Helm release.
 - [infrastructure/kyverno](infrastructure/kyverno): Kyverno manifests.
 - [app/kubernetes](app/kubernetes): microservices application manifests.
 

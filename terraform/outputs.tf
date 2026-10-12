@@ -16,6 +16,11 @@ output "eks_oidc_issuer_url" {
   value       = module.eks.cluster_oidc_issuer_url
 }
 
+output "ebs_csi_irsa_role_arn" {
+  description = "IAM role ARN assumed by the EBS CSI controller service account"
+  value       = module.addons.ebs_csi_irsa_role_arn
+}
+
 output "observability_irsa_role_arns" {
   description = "IAM role ARNs for the Mimir, Loki, and Tempo service accounts"
   value       = module.irsa.observability_role_arns

@@ -92,8 +92,9 @@ variable "cluster_addons" {
   description = "EKS managed addons to install"
   type        = any
   default = {
-    coredns    = { most_recent = true }
-    kube-proxy = { most_recent = true }
+    coredns            = { most_recent = true }
+    kube-proxy         = { most_recent = true }
+    aws-ebs-csi-driver = { most_recent = true }
     vpc-cni    = {
       most_recent   = true
       before_compute = true

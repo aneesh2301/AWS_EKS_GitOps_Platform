@@ -13,7 +13,12 @@ module "eks" {
 
   enable_irsa               = var.enable_irsa
   cluster_enabled_log_types = var.cluster_enabled_log_types
-  cluster_addons            = var.cluster_addons
+  cluster_addons = merge(var.cluster_addons, {
+    aws-ebs-csi-driver = {
+      most_recent              = true
+      service_account_role_arn = module.addons.ebs_csi_irsa_role_arn
+    }
+  })
   node_group                = var.node_group
   admin_principal_arn       = var.admin_principal_arn
 

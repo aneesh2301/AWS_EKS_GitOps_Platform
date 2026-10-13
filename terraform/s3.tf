@@ -1,5 +1,6 @@
 resource "aws_s3_bucket" "observability" {
   bucket = "${var.cluster_name}-${var.environment}-observability"
+  force_destroy = true
 
   tags = {
     Name        = "${var.cluster_name}-${var.environment}-observability"

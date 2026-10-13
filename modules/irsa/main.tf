@@ -1,15 +1,15 @@
 locals {
 	observability_backends = {
 		mimir = {
-			prefix          = "metrics"
+			prefixes        = ["blocks", "alertmanager", "ruler"]
 			service_account = "mimir"
 		}
 		loki = {
-			prefix          = "logs"
+			prefixes        = ["logs"]
 			service_account = "loki"
 		}
 		tempo = {
-			prefix          = "traces"
+			prefixes        = ["traces"]
 			service_account = "tempo"
 		}
 	}
@@ -52,33 +52,28 @@ resource "aws_iam_policy" "observability_s3" {
 		Version = "2012-10-17"
 		Statement = [
 			{
-				Sid    = "ListOwnPrefix"
+				Sid    = "DescribeAndListBucket"
 				Effect = "Allow"
 				Action = [
-					"s3:ListBucket"
+					"s3:GetBucketLocation",
+					"s3:ListBucket",
+					"s3:ListBucketMultipartUploads"
 				]
 				Resource = var.observability_bucket_arn
-				Condition = {
-					StringLike = {
-						"s3:prefix" = [
-							each.value.prefix,
-							"${each.value.prefix}/*"
-						]
-					}
-				}
 			},
 			{
 				Sid    = "ManageOwnObjects"
 				Effect = "Allow"
 				Action = [
 					"s3:GetObject",
-					"s3:ListBucket",
 					"s3:PutObject",
 					"s3:DeleteObject",
 					"s3:AbortMultipartUpload",
 					"s3:ListMultipartUploadParts"
 				]
-				Resource = "${var.observability_bucket_arn}/${each.value.prefix}/*"
+				Resource = [
+					for prefix in each.value.prefixes : "${var.observability_bucket_arn}/${prefix}/*"
+				]
 			}
 		]
 	})

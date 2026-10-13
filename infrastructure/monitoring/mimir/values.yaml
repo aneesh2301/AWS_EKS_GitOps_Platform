@@ -25,21 +25,28 @@ mimir:
       storage:
         backend: s3
         s3:
+          endpoint: s3.us-east-1.amazonaws.com
           region: us-east-1
 
     blocks_storage:
       backend: s3
       s3:
+        endpoint: s3.us-east-1.amazonaws.com
+        region: us-east-1
         bucket_name: eks-dev-cluster-dev-observability
 
     alertmanager_storage:
       backend: s3
       s3:
+        endpoint: s3.us-east-1.amazonaws.com
+        region: us-east-1
         bucket_name: eks-dev-cluster-dev-observability
 
     ruler_storage:
       backend: s3
       s3:
+        endpoint: s3.us-east-1.amazonaws.com
+        region: us-east-1
         bucket_name: eks-dev-cluster-dev-observability
 
 serviceAccount:

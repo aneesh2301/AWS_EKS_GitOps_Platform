@@ -1,0 +1,13 @@
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: OCIRepository
+metadata:
+  name: karpenter
+  namespace: tooling
+spec:
+  interval: 10m
+  url: oci://public.ecr.aws/karpenter/karpenter
+  ref:
+    tag: "1.15.0"
+  layerSelector:
+    mediaType: "application/vnd.cncf.helm.chart.content.v1.tar+gzip"
+    operation: copy

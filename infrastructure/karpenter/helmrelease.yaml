@@ -1,0 +1,34 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: karpenter
+  namespace: tooling
+spec:
+  interval: 10m
+  releaseName: karpenter
+  targetNamespace: tooling
+  chartRef:
+    kind: OCIRepository
+    name: karpenter
+    namespace: tooling
+  values:
+    settings:
+      clusterName: eks-dev-cluster
+
+    serviceAccount:
+      create: true
+      name: karpenter
+      annotations:
+        eks.amazonaws.com/role-arn: "${KARPENTER_CONTROLLER_ROLE_ARN}"
+
+    nodeSelector:
+      workload-tier: system
+
+    controller:
+      resources:
+        requests:
+          cpu: 500m
+          memory: 512Mi
+        limits:
+          cpu: 1
+          memory: 1Gi

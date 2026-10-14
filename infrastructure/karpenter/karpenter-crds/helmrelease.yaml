@@ -1,0 +1,15 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: karpenter-crd
+  namespace: tooling
+spec:
+  interval: 10m
+  chartRef:
+    kind: OCIRepository
+    name: karpenter-crd
+    namespace: tooling
+  install:
+    crds: Create
+  upgrade:
+    crds: CreateReplace

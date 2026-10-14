@@ -6,6 +6,16 @@ metadata:
 spec:
   interval: 10m
 
+  install:
+    timeout: 15m
+    remediation:
+      retries: 3
+
+  upgrade:
+    timeout: 15m
+    remediation:
+      retries: 3
+
   chart:
     spec:
       chart: mimir-distributed

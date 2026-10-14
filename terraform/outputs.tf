@@ -21,6 +21,16 @@ output "ebs_csi_irsa_role_arn" {
   value       = module.addons.ebs_csi_irsa_role_arn
 }
 
+output "karpenter_controller_irsa_role_arn" {
+  description = "IAM role ARN assumed by the Karpenter controller service account"
+  value       = module.karpenter.controller_role_arn
+}
+
+output "karpenter_node_iam_role_arn" {
+  description = "IAM role ARN assigned to Karpenter-provisioned EC2 instances"
+  value       = module.karpenter.node_role_arn
+}
+
 output "observability_irsa_role_arns" {
   description = "IAM role ARNs for the Mimir, Loki, and Tempo service accounts"
   value       = module.irsa.observability_role_arns

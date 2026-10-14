@@ -1,0 +1,13 @@
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: karpenter-crds
+  namespace: tooling
+spec:
+  interval: 10m
+  path: ./infrastructure/karpenter/karpenter-crds
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: tooling
+  wait: true

@@ -8,4 +8,7 @@ resources:
   - monitoring.yaml
   - kyverno.yaml
   - mimir.yaml
+  - karpenter-crds.yaml
+  - karpenter.yaml
+  - karpenter-config.yaml
   

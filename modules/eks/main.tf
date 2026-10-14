@@ -31,6 +31,9 @@ module "eks" {
       desired_size   = var.node_group.desired_size
       capacity_type  = var.node_group.capacity_type
       subnet_ids     = var.subnet_ids
+      labels = {
+        "workload-tier" = "system"
+      }
     }
   }
 

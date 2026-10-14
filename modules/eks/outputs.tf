@@ -32,3 +32,8 @@ output "cluster_oidc_issuer_url" {
   description = "HTTPS issuer URL of the EKS OIDC provider"
   value       = module.eks.cluster_oidc_issuer_url
 }
+
+output "node_security_group_id" {
+  description = "ID of the security group shared by EKS worker nodes"
+  value       = module.eks.node_security_group_id
+}

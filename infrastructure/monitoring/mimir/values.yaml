@@ -58,18 +58,78 @@ serviceAccount:
   annotations:
     eks.amazonaws.com/role-arn: "arn:aws:iam::339712970776:role/eks-dev-cluster-dev-mimir-s3"
 
-alertmanager:
-  persistentVolume:
-    storageClass: gp2
-
-compactor:
-  persistentVolume:
-    storageClass: gp2
+distributor:
+  replicas: 1
+  resources:
+    requests:
+      cpu: 200m
+      memory: 256Mi
+    limits:
+      cpu: 500m
+      memory: 512Mi
 
 ingester:
+  replicas: 2
+  resources:
+    requests:
+      cpu: 500m
+      memory: 512Mi
+    limits:
+      cpu: 500m
+      memory: 1Gi
   persistentVolume:
-    storageClass: gp2
+    enabled: true
+    size: 1Gi
+    storageClass: gp3
+
+  zoneAwareReplication:
+    enabled: false
 
 store_gateway:
+  replicas: 1
+  resources:
+    requests:
+      cpu: 500m
+      memory: 512Mi
+    limits:
+      cpu: 500m
+      memory: 1Gi
   persistentVolume:
-    storageClass: gp2
+    enabled: true
+    size: 1Gi
+    storageClass: gp3
+
+compactor:
+  replicas: 1
+  resources:
+    requests:
+      cpu: 500m
+      memory: 1Gi
+    limits:
+      cpu: 2000m
+      memory: 4Gi
+  persistentVolume:
+    enabled: true
+    size: 50Gi
+    storageClass: gp3
+
+query_frontend:
+  replicas: 1
+  resources:
+    requests:
+      cpu: 500m
+      memory: 512Mi
+    limits:
+      cpu: 500m
+      memory: 512Mi
+
+querier:
+  replicas: 1
+  resources:
+    requests:
+      cpu: 500m
+      memory: 512Mi
+    limits:
+      cpu: 500m
+      memory: 512Mi
+

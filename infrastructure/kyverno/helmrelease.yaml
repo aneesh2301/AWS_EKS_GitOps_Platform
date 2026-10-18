@@ -21,3 +21,52 @@ spec:
     crds: CreateReplace
     remediation:
       retries: 3
+  
+  values:
+    # Admission controller configuration
+    admissionController:
+      replicas: 1
+      resources:
+        requests:
+          memory: "256Mi"
+          cpu: "100m"
+        limits:
+          memory: "512Mi"
+          cpu: "500m"
+      # Configure the admission webhook
+      serviceMonitor:
+        enabled: false
+      container:
+        extraArgs:
+          # Webhook timeout in seconds
+          webhookTimeout: 10
+    # Background controller for generate and mutate existing policies
+    backgroundController:
+      replicas: 1
+      resources:
+        requests:
+          memory: "128Mi"
+          cpu: "100m"
+        limits:
+          memory: "256Mi"
+          cpu: "200m"
+    # Cleanup controller for TTL-based cleanup policies
+    cleanupController:
+      replicas: 1
+      resources:
+        requests:
+          memory: "128Mi"
+          cpu: "100m"
+        limits:
+          memory: "256Mi"
+          cpu: "200m"
+    # Reports controller for policy reports
+    reportsController:
+      replicas: 1
+      resources:
+        requests:
+          memory: "128Mi"
+          cpu: "100m"
+        limits:
+          memory: "256Mi"
+          cpu: "200m"

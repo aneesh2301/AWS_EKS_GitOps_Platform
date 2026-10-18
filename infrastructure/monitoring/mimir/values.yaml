@@ -4,8 +4,6 @@ minio:
 kafka:
   enabled: false
 
-nginx:
-  enabled: true
 
 # Use classic architecture rather than ingest storage.
 mimir:
@@ -132,4 +130,12 @@ querier:
     limits:
       cpu: 500m
       memory: 512Mi
+
+nginx:
+  enabled: true
+  replicas: 1
+  resources:
+    requests:
+      cpu: 100m
+      memory: 128Mi
 

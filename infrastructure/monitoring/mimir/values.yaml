@@ -4,6 +4,12 @@ minio:
 kafka:
   enabled: false
 
+alertmanager:
+  enabled: false
+
+ruler:
+  enabled: false
+
 
 # Use classic architecture rather than ingest storage.
 mimir:
@@ -29,22 +35,6 @@ mimir:
     blocks_storage:
       backend: s3
       storage_prefix: blocks
-      s3:
-        endpoint: s3.us-east-1.amazonaws.com
-        region: us-east-1
-        bucket_name: eks-dev-cluster-dev-observability
-
-    alertmanager_storage:
-      backend: s3
-      storage_prefix: alertmanager
-      s3:
-        endpoint: s3.us-east-1.amazonaws.com
-        region: us-east-1
-        bucket_name: eks-dev-cluster-dev-observability
-
-    ruler_storage:
-      backend: s3
-      storage_prefix: ruler
       s3:
         endpoint: s3.us-east-1.amazonaws.com
         region: us-east-1

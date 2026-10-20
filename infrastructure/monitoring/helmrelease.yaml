@@ -33,6 +33,8 @@ spec:
           - url: http://mimir-nginx.monitoring.svc.cluster.local/api/v1/push
     
     grafana:
+      operator:
+        dashboardsConfigMapRefEnabled: false
     resources:
       requests:
         cpu: 100m

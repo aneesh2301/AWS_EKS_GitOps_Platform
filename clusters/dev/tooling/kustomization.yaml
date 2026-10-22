@@ -11,4 +11,6 @@ resources:
   - karpenter-crds.yaml
   - karpenter.yaml
   - karpenter-config.yaml
+  - grafana-crds.yaml
+  - grafana.yaml
   

@@ -1,0 +1,13 @@
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: grafana-operator-crds
+  namespace: tooling
+spec:
+  interval: 10m
+  path: ./infrastructure/monitoring/grafana/grafana-crds
+  prune: false
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  wait: true

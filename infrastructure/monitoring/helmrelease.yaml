@@ -33,6 +33,11 @@ spec:
           - url: http://mimir-nginx.monitoring.svc.cluster.local/api/v1/push
     
     grafana:
+      adminPassword: ""
+      admin:
+        existingSecret: grafana-admin-credentials
+        userKey: admin-user
+        passwordKey: admin-password
       operator:
         dashboardsConfigMapRefEnabled: false
     resources:

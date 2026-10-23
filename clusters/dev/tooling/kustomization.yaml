@@ -3,7 +3,7 @@ kind: Kustomization
 resources:
   - app.yaml
   - flux-instance.yaml
-  - sealed-secrets
+  - sealed-secrets.yaml
   - monitoring-crds.yaml
   - monitoring.yaml
   - kyverno.yaml

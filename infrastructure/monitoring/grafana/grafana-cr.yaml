@@ -1,0 +1,16 @@
+apiVersion: grafana.integreatly.org/v1beta1
+kind: Grafana
+metadata:
+  name: existing-grafana
+  namespace: monitoring
+  labels:
+    dashboards: main-grafana
+spec:
+  external:
+    url: http://kube-prometheus-stack-grafana.monitoring.svc:80
+    adminUser:
+      name: grafana-admin-credentials
+      key: admin-user
+    adminPassword:
+      name: grafana-admin-credentials
+      key: admin-password

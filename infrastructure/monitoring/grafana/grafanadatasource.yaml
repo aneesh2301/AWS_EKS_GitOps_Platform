@@ -1,0 +1,15 @@
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDatasource
+metadata:
+  name: mimir
+  namespace: monitoring
+spec:
+  instanceSelector:
+    matchLabels:
+      dashboards: main-grafana
+  datasource:
+    name: Mimir
+    type: prometheus
+    access: proxy
+    url: http://mimir-nginx.monitoring.svc:80/prometheus
+    isDefault: true

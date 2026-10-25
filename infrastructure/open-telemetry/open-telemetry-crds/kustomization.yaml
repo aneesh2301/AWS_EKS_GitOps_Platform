@@ -3,3 +3,4 @@ kind: Kustomization
 resources:
   - https://raw.githubusercontent.com/open-telemetry/opentelemetry-operator/v0.161.0/bundle/community/manifests/opentelemetry.io_opentelemetrycollectors.yaml
   - https://raw.githubusercontent.com/open-telemetry/opentelemetry-operator/v0.161.0/bundle/community/manifests/opentelemetry.io_instrumentations.yaml
+  - https://raw.githubusercontent.com/open-telemetry/opentelemetry-operator/v0.161.0/bundle/community/manifests/opentelemetry.io_targetallocators.yaml

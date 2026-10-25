@@ -13,4 +13,6 @@ resources:
   - karpenter-config.yaml
   - grafana-crds.yaml
   - grafana.yaml
+  - cert-manager-crds.yaml
+  - cert-manager.yaml
   

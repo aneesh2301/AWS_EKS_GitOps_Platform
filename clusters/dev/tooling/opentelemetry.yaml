@@ -1,0 +1,14 @@
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: opentelemetry-controller
+  namespace: tooling
+spec:
+  interval: 10m
+  path: ./infrastructure/open-telemetry/
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: tooling
+  dependsOn:
+    - name: opentelemetry-crds

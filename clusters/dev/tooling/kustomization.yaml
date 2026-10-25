@@ -15,4 +15,6 @@ resources:
   - grafana.yaml
   - cert-manager-crds.yaml
   - cert-manager.yaml
+  - opentelemetry-crds.yaml
+  - opentelemetry.yaml
   

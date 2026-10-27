@@ -10,6 +10,9 @@ alertmanager:
 ruler:
   enabled: false
 
+query_scheduler:
+  enabled: false
+
 
 # Use classic architecture rather than ingest storage.
 mimir:

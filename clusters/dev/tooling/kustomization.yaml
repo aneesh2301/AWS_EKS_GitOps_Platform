@@ -17,4 +17,5 @@ resources:
   - cert-manager.yaml
   - opentelemetry-crds.yaml
   - opentelemetry.yaml
+  - metrics-server.yaml
   

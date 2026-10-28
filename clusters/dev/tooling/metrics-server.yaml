@@ -1,0 +1,15 @@
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: metrics-server
+  namespace: tooling
+spec:
+  interval: 1m
+  path: ./infrastructure/metrics-server
+  targetNamespace: tooling
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: tooling
+  wait: true
+  timeout: 5m

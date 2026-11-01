@@ -4,3 +4,4 @@ resources:
   - helmrepository.yaml
   - helmrelease.yaml
   - opentelemetry-configs/collector.yaml
+  - opentelemetry-configs/instrumentation.yaml

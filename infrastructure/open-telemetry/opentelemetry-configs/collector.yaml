@@ -5,6 +5,7 @@ metadata:
   namespace: tooling
 spec:
   mode: deployment
+  image: otel/opentelemetry-collector-contrib:0.161.0
   replicas: 1
   resources:
     requests:

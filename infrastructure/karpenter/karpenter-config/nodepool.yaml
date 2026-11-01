@@ -43,8 +43,8 @@ spec:
             - "5"
 
   limits:
-    cpu: "100"
-    memory: 200Gi
+    cpu: "8"
+    memory: 16Gi
 
   disruption:
     consolidationPolicy: WhenEmptyOrUnderutilized

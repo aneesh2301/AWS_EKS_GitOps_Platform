@@ -15,13 +15,6 @@ An AWS Kubernetes platform built with Terraform, Amazon EKS, Flux Operator, and 
 - AWS-managed EBS CSI add-on with an IRSA role assigned through `service_account_role_arn`.
 - GitOps definitions for the microservices app, Sealed Secrets, Prometheus Operator CRDs, kube-prometheus-stack, Kyverno, and Mimir.
 
-### Needs Cluster Reconciliation
-
-The repository has been locally validated, but runtime health must be checked after applying Terraform and allowing Flux to reconcile. In particular:
-
-- Mimir has a Flux Kustomization but [infrastructure/monitoring/mimir](infrastructure/monitoring/mimir) still needs a `kustomization.yaml` that includes its HelmRepository and HelmRelease, and its `values.yaml` must be connected to the HelmRelease.
-- Confirm Flux source authentication, HelmRepository readiness, HelmRelease readiness, and workload health on the cluster.
-- Confirm the desired Kyverno CRD ownership approach before relying on Kyverno policies in production.
 
 ## Architecture
 
